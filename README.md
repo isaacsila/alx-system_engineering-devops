@@ -1,2 +1,1 @@
-# alx-system_engineering-devops
-writing script in shell
+This is how we write script
