@@ -1,6 +1,2 @@
 #!/bin/bash
-<<<<<<< HEAD
-echo "hello" $USER
-=======
-echo $PATH | tr -s ":" "\n" | wc -l
->>>>>>> adbb907cdd570124aca9c1c06d98301d4f9012cf
+echo $PATH | tr ':' '\n' | wc -l
