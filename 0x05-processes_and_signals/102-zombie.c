@@ -1,40 +1,25 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "unistd.h"
+#!/usr/bin/env bash
+# Manages 'manage_my_process'
 
-/**
- * infinite_while - a function that runs forever and returns nothing
- * Return: 0 in the end
- */
-int infinite_while(void)
-{
-	while (1)
-	{
-		sleep(1);
-	}
-	return (0);
-}
-
-/**
- * main - the entry to a program that creates 5 zombie process
- * Return: 0 on success
- */
-int main(void)
-{
-	int children = 0;
-	pid_t pid;
-
-	while (children < 5)
-	{
-		pid = fork();
-		if (!pid)
-			break;
-		printf("Zombie process created, PID: %i\n", (int)pid);
-		children++;
-	}
-	if (pid != 0)
-	{
-		infinite_while();
-	}
-	return (0);
-}
+if [ "${1}" == "start" ]
+then
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+elif [ "${1}" == "stop" ]
+then
+    echo "manage_my_process stopped"
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+elif [ "${1}" == "restart" ]
+then
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+else
+    echo "Usage: manage_my_process {start|stop|restart}"
+fi
